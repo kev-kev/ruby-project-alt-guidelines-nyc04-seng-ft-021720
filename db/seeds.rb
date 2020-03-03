@@ -1,12 +1,15 @@
-fake_name = Faker::Name.name
-fake_password = Faker::Alphanumeric.alpha(number: 10)
-user1 = User.new({user_name: fake_name,password: fake_password })
-user2 = User.new({user_name: fake_name,password: fake_password })
-user3 = User.new({user_name: fake_name,password: fake_password })
-user4 = User.new({user_name: fake_name,password: fake_password })
-user5 = User.new({user_name: fake_name,password: fake_password })
-user6 = User.new({user_name: fake_name,password: fake_password })
-user7 = User.new({user_name: fake_name,password: fake_password })
-user8 = User.new({user_name: fake_name,password: fake_password })
-user9 = User.new({user_name: fake_name,password: fake_password })
-user10 = User.new({user_name: fake_name,password: fake_password })
+
+#fake_name = Faker::Name.name
+#fake_password = Faker::Alphanumeric.alpha(number: 10)
+
+
+
+user2 = User.create(user_name:"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user3 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user4 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user5 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user6 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user7 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user8 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user9 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
+user10 = User.create(:user_name=>"#{Faker::Name.name}",:password =>"#{Faker::Alphanumeric.alpha(number: 10)}",balance: 0)
