@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_155035) do
+ActiveRecord::Schema.define(version: 2020_03_03_173824) do
+
+  create_table "games", force: :cascade do |t|
+    t.string "title"
+    t.string "genre"
+    t.string "platform"
+    t.integer "price"
+    t.string "release_date"
+    t.string "esrb_rating"
+    t.float "review_score"
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "game_id"
+    t.index ["game_id"], name: "index_purchases_on_game_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "user_name"
