@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_many :purchases
   has_many :games, through: :purchases
+
   #attr_accessor :user_name,:password,:balance
 
   # def create(user_attributes)
@@ -9,7 +10,7 @@ class User < ActiveRecord::Base
   #   @password = password
   #   @balance = 0
   # end
-
+  
   def self.login_or_new_user(users_name)
     find_or_create_by(user_name: "#{users_name}")
   end
