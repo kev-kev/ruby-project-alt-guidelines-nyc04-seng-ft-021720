@@ -20,11 +20,22 @@ game2 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}",
 game3 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
 game4 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
 game5 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
-game6 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
-game7 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
-game8 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
-game9 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
-game10 = Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
 
-10.times{Purchase.create(:game => Game.all.shuffle.first, :user => User.all.shuffle.first)}
-#{Purchase.create(:game => game1, :user => user1)}
+Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
+Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
+Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
+Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
+Game.create(title:"#{Faker::Game.title}", genre: "#{Faker::Game.genre}", platform: "#{Faker::Game.platform}", price: (rand(20...70)).round_to(5), release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: esrb_letters.sample, review_score: rand(0.0...10).to_f.round(2))
+
+100.times{
+  Purchase.create(
+    :game => Game.all.shuffle.first,
+    :user => User.all.shuffle.first
+  )
+}
+
+Purchase.create(:game => game1, :user => user1)
+Purchase.create(:game => game2, :user => user2)
+Purchase.create(:game => game3, :user => user3)
+Purchase.create(:game => game4, :user => user4)
+Purchase.create(:game => game5, :user => user5)
