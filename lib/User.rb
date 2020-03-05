@@ -28,12 +28,16 @@ class User < ActiveRecord::Base
   def make_purchase_by_id(selected_game_id) 
     game = Game.find_by(id: selected_game_id)
     if self.balance - game.price >= 0
-      Purchase.create(:game => game, :user => self)
+      Purchase.create(:game => game, :user => self)# :price => game.price
       self.balance -= game.price
       puts "Purchase Complete!" #1
       puts "Your balance is now #{self.balance}."
     else
       return "Insufficient Funds."#2
     end
+  end
+
+  def refund_purchase_by_id(selected_game_id)
+
   end
 end
