@@ -64,7 +64,6 @@ def store(prompt, user)
     
     
     choice = prompt.select("How would you like to sort our options",%w(Genre Rating Price))
-
     case choice
     when "Genre"
         genre_choice = prompt.ask("Which Genre are you looking for")
@@ -73,23 +72,23 @@ def store(prompt, user)
         chosen_game = prompt.select("Which game would you like to view",@games_by_genre)
         chosen_game_instance = Game.all.find_by(title: chosen_game)
         chosen_game_id = chosen_game_instance.id
-        
+        puts chosen_game_id.attributes.map{|k,v| "#{k} = #{v}"}.join(“\n”)
         is_buying = prompt.yes?("Would you like to purchase this game")
         if is_buying == true
             user.make_purchase(chosen_game_id) 
             puts "Returning to Store menu"
             main_menu(prompt,user)
         else
-         puts "You selected no , Returning to the Store menu"
+         puts "You selected no, Returning to the Store menu"
          store(prompt,user)
         end
-
-when "Rating"
+ when "Rating"
     puts "Sorting by rating"
     games_by_rating = Game.all.order(:rating)
     @games_by_rating = game_by_rating.map {|x| x.title}
     chosen_game = prompt.select("Which game would you like to view",(@games_by_rating))
     chosen_game_id = Game.all.where(chosen_game).id
+    puts chosen_game_id.attributes.map{|k,v| "#{k} = #{v}"}.join(“\n”)
     is_buying = prompt.yes?("Would you like to purchase this game")
     if is_buying == "Y"
         if user.make_purchase(chosen_game_id) == "Insufficient Funds"
@@ -100,7 +99,23 @@ when "Rating"
         puts "Returning to the Store menu"
         store(prompt,user)
     end
-end
+when "Price"
+    puts "Sorting by price"
+    games_by_price = Game.all.order(:price)
+    @games_by_price = game_by_price.map {|x| x.title}
+    chosen_game = prompt.select("Which game would you like to view",(@games_by_price))
+    chosen_game_id = Game.all.where(chosen_game).id
+    puts chosen_game_id.attributes.map{|k,v| "#{k} = #{v}"}.join(“\n”)
+    is_buying = prompt.yes?("Would you like to purchase this game")
+    if is_buying == "Y"
+        if user.make_purchase(chosen_game_id) == "Insufficient Funds"
+          puts "Insufficient Funds, please return to the menu and add funds"
+          main_menu(prompt,user)
+        end
+    else
+        puts "Returning to the Store menu"
+        store(prompt,user)
+    end
 end
 cli_runner
 
