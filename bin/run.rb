@@ -96,6 +96,7 @@ def store(prompt, user)
           puts "Returning to the Store Menu."
           store(prompt, user)
         end
+      else
         puts "Returning to the Store Menu."
         store(prompt, user)
       end
@@ -117,7 +118,8 @@ def store(prompt, user)
           puts "Returning to the Store menu"
           store(prompt, user)
         end
-        puts "Returning to the Store menu"
+      else
+        puts "Returning to the Store Menu."
         store(prompt, user)
       end
     
@@ -138,7 +140,8 @@ def store(prompt, user)
           puts "Returning to the Store menu"
           store(prompt, user)
         end
-        puts "Returning to the Store menu"
+      else
+        puts "Returning to the Store Menu."
         store(prompt, user)
       end
 
@@ -152,7 +155,7 @@ def store(prompt, user)
     #   binding.pry
       
     #   purchases.destroy(purchase_id_to_refund)
-    # end
+    end
 end
 
 def wallet(prompt, user)
