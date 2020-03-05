@@ -8,6 +8,7 @@ class CreateGameInfo < ActiveRecord::Migration[5.2]
       t.string :release_date
       t.string :esrb_rating
       t.float :review_score 
+      t.string :description
     end
   end
 end

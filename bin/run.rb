@@ -5,17 +5,12 @@ def cli_runner
   user = start_screen(prompt)
 end
 
-kevin = User.create(user_name: "Kevin", password: "123456", balance: 1000)
-fakerrpg = Game.create(title:"FakerJRPG", genre: "JRPG", platform: "#{Faker::Game.platform}", price: 30, release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", esrb_rating: "E", review_score: 10)
-Purchase.create(:game => fakerrpg, :user => kevin)
-
 def start_screen(prompt)
-  # Low priority- find out how to use multiple words in one option in TTY
-  choice = prompt.select("Would you like to login or create a new account?", %w(Login Create))
+  choice = prompt.select("Would you like to login or create a new account?", %w(Login Create\ Account))
   if choice == "Login"
     user_name_prompt = prompt.ask('Username:') 
-    user = User.find_by(user_name: user_name_prompt) 
-    while !user || user_name_prompt == ""
+    user = User.find_by(user_name: user_name_prompt)
+    while !user || user_name_prompt == nil
       user_answer = prompt.yes?("Username not found. Return to previous menu?")
       if user_answer == true
         start_screen(prompt)
@@ -66,16 +61,12 @@ def main_menu(prompt, user)
 end
 
 def library(prompt, user)
-  # Stretch goal: User receives all games in a selectable list.
-  # Selecting a game will return info for that game
   @collection = user.games
   if @collection == []
     puts "You don't currently own any games."
     main_menu(prompt, user)
   end
-  #Stretch: want to be able to access the id of the selected game 
-  #Actually prob doesn't matter 
-  selected_game_title = prompt.select("Please select a game.", @collection.map{|game| game.title})
+  selected_game_title = prompt.select("Please select an option", @collection.map{|game| game.title})
   selected_game = @collection.find_by(title: "#{selected_game_title}")
   puts selected_game.attributes.map{|k,v| "#{k} = #{v}"}.join("\n")
   main_menu(prompt, user)
@@ -83,42 +74,85 @@ end
 
 def store(prompt, user)
 #  Stretch add best selling as sorting option
-  choice = prompt.select("How would you like to sort our options",%w(Genre Rating Price))
-  case choice
+  choice = prompt.select("How would you like to sort the games?",%w(Genre Review\ Score Price Main\ Menu)) #Add in Refund\ Game to arr if we want to implement refunds
+    case choice
+    when "Main Menu"
+      main_menu(prompt, user)
+
     when "Genre"
-      genre_choice = prompt.ask("Which Genre are you looking for")
+      genre_choice = prompt.select("Which Genre are you looking for?", %w(RPG JRPG Strategy FPS Action MOBA Indie MMO Sports Simulation))
       games_by_genre_instances = Game.all.where(genre: genre_choice)
       @games_by_genre = games_by_genre_instances.map {|x| x.title}
-      chosen_game = prompt.select("Which game would you like to view", @games_by_genre)
+      chosen_game = prompt.select("Which game would you like to view?",@games_by_genre)
       chosen_game_instance = Game.all.find_by(title: chosen_game)
-      chosen_game_id = chosen_game_instance.id
-      is_buying = prompt.yes?("Would you like to purchase this game")
-
-      if is_buying == true
-        user.make_purchase_by_id(chosen_game_id) 
-        puts "Returning to Store menu"
-        main_menu(prompt,user)
-      else
-        puts "You selected no , Returning to the Store menu"
-        store(prompt,user)
+      chosen_game_id = Game.find_by(title: chosen_game).id
+      puts chosen_game_instance.attributes.map{|k,v| "#{k} = #{v}"}.join("\n")
+      is_buying = prompt.yes?("Would you like to purchase this game? $#{chosen_game_instance.price} will be removed from your wallet balance.\nCURRENT WALLET BALANCE: $#{user.balance}")
+      if is_buying
+        if user.make_purchase_by_id(chosen_game_id) == "Insufficient Funds."
+          puts "Insufficient Funds, please add funds to your wallet and try again. \nReturning to the Main Menu"
+          main_menu(prompt,user)
+        else
+          puts "Returning to the Store Menu."
+          store(prompt, user)
+        end
+        puts "Returning to the Store Menu."
+        store(prompt, user)
       end
 
-  when "Rating"
-    puts "Sorting by rating"
-    @games_by_rating = Game.all.order(:rating).map {|x| x.title}
-    chosen_game = prompt.select("Which game would you like to view",(@games_by_rating))
-    chosen_game_id = Game.all.where(chosen_game).ids
-    is_buying = prompt.yes?("Would you like to purchase this game")
-    if is_buying == "Y"
-        if user.make_purchase_by_id(chosen_game_id) == "Insufficient Funds"
-          puts "Insufficient Funds, please return to the menu and add funds"
+    when "Review Score"
+      puts "Sorting by review score"
+      @games_by_rating = Game.all.order("review_score DESC")
+      game_titles = @games_by_rating.map{|game| game.title}
+      chosen_game = prompt.select("Which game would you like to view", game_titles)
+      chosen_game_id = Game.find_by(title: chosen_game).id
+      chosen_game_instance = Game.all.find_by(title: chosen_game)
+      puts chosen_game_instance.attributes.map{|k,v| "#{k} = #{v}"}.join("\n")
+      is_buying = prompt.yes?("Would you like to purchase this game? $#{chosen_game_instance.price} will be removed from your wallet balance.\nCURRENT WALLET BALANCE: $#{user.balance}")
+      if is_buying
+        if user.make_purchase_by_id(chosen_game_id) == "Insufficient Funds."
+          puts "Insufficient Funds, please add funds to your wallet and try again. \nReturning to the Main Menu"
           main_menu(prompt,user)
+        else
+          puts "Returning to the Store menu"
+          store(prompt, user)
         end
-    else
         puts "Returning to the Store menu"
-        store(prompt,user)
-    end
-  end
+        store(prompt, user)
+      end
+    
+    when "Price"
+      puts "Sorting by Price"
+      @games_by_price = Game.all.order("price")
+      game_titles = @games_by_price.map{|game| game.title}
+      chosen_game = prompt.select("Which game would you like to view", game_titles)
+      chosen_game_id = Game.find_by(title: chosen_game).id
+      chosen_game_instance = Game.all.find_by(title: chosen_game)
+      puts chosen_game_instance.attributes.map{|k,v| "#{k} = #{v}"}.join("\n")
+      is_buying = prompt.yes?("Would you like to purchase this game? $#{chosen_game_instance.price} will be removed from your wallet balance.\nCURRENT WALLET BALANCE: $#{user.balance}")
+      if is_buying
+        if user.make_purchase_by_id(chosen_game_id) == "Insufficient Funds."
+          puts "Insufficient Funds, please add funds to your wallet and try again. \nReturning to the Main Menu"
+          main_menu(prompt,user)
+        else
+          puts "Returning to the Store menu"
+          store(prompt, user)
+        end
+        puts "Returning to the Store menu"
+        store(prompt, user)
+      end
+
+    # Taking out game refund 
+    # when "Refund Game"
+    #   # binding.pry
+    #   game_to_refund = prompt.select("Please select a game to refund.", user.games.map{|game| game.title })
+    #   # add the price of the game to the users balance
+    #   money_to_refund = user.games.find_by(title: game_to_refund).price #instead use user.purchases.find_by(title: game_to_refund).price
+    #   purchase_id_to_refund = user.purchases.find_by(title: game_to_refund).id
+    #   binding.pry
+      
+    #   purchases.destroy(purchase_id_to_refund)
+    # end
 end
 
 def wallet(prompt, user)
@@ -152,4 +186,5 @@ def delete_account(prompt, user)
     end
   end
 end
+
 cli_runner

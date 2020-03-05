@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_173824) do
+ActiveRecord::Schema.define(version: 2020_03_05_170205) do
 
   create_table "games", force: :cascade do |t|
     t.string "title"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_173824) do
     t.string "release_date"
     t.string "esrb_rating"
     t.float "review_score"
+    t.string "description"
   end
 
   create_table "purchases", force: :cascade do |t|

@@ -8,6 +8,7 @@
 #Seed games
 esrb_letters = %w[E T M RP]
 genre_arr = %w[RPG JRPG Strategy FPS Action MOBA Indie MMO Sports Simulation]
+
 100.times{
   Game.create(
     title:"#{Faker::Game.title}", 
@@ -17,7 +18,8 @@ genre_arr = %w[RPG JRPG Strategy FPS Action MOBA Indie MMO Sports Simulation]
     release_date: "#{Faker::Date.between(from: 10.years.ago, to: Date.today)}", 
     esrb_rating: esrb_letters.sample, 
     review_score: rand(0.0...10).to_f.round(2), 
-    description: Faker::Marketing.buzzwords)
+    description: "#{Faker::Lorem.paragraph(sentence_count: 3)}"
+    )
   }
 
 50.times{
