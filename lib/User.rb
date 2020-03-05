@@ -47,6 +47,9 @@ class User < ActiveRecord::Base
     if self.balance - game.price >= 0
       Purchase.create(:game => game, :user => self)
       self.balance -= game.price
+      puts "Purchase Complete"
+    else
+      puts "Insufficient Funds"
     end
   end
 
