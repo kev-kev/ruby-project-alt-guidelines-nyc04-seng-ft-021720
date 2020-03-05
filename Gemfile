@@ -10,3 +10,5 @@ gem "faker"
 gem 'rake'
 gem 'rounding'
 gem 'tty-prompt'
+gem 'rest-client'
+gem 'json'

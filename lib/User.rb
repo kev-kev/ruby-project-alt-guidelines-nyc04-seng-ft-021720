@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
 
   def self.login_or_new_user(users_name)
     find_or_create_by(user_name: "#{users_name}")
-
   end
 
   def view_owned_game_ids  # takes the users's purchase instances and returns the game ids
@@ -42,11 +41,12 @@ class User < ActiveRecord::Base
   end
 
   #take in a selected game id that we wanna purchase, add the game to the library, deduct the game price from balance
-  def make_purchase(selected_game_id) 
-    game = Game.get_game_by_id(selected_game_id)
+  def make_purchase_by_id(selected_game_id) 
+    game = Game.find_by(id: selected_game_id)
     if self.balance - game.price >= 0
       Purchase.create(:game => game, :user => self)
       self.balance -= game.price
+      # self.purchases << game 
     end
   end
 
