@@ -2,18 +2,6 @@ class User < ActiveRecord::Base
   
   has_many :purchases
   has_many :games, through: :purchases
-  #attr_accessor :user_name,:password,:balance
-
-  # def create(user_attributes)
-  #   user_attributes.each {|key,value| self.send(("#{key}="))}
-  #   @name = name
-  #   @password = password
-  #   @balance = 0
-  # end
-
-  def self.login_or_new_user(users_name)
-    find_or_create_by(user_name: "#{users_name}")
-  end
 
   def view_owned_game_ids  # takes the users's purchase instances and returns the game ids
     self.games.map do |game|
@@ -36,9 +24,6 @@ class User < ActiveRecord::Base
     }
   end
 
-  def add_funds(funds) #take in an integer and add it to this users' balance
-    self.balance += funds
-  end
 
   #take in a selected game id that we wanna purchase, add the game to the library, deduct the game price from balance
   def make_purchase_by_id(selected_game_id) 
@@ -46,7 +31,10 @@ class User < ActiveRecord::Base
     if self.balance - game.price >= 0
       Purchase.create(:game => game, :user => self)
       self.balance -= game.price
+      puts "Purchase Complete!"
       # self.purchases << game 
+    else
+      puts "Insufficient Funds."
     end
   end
 
